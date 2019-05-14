@@ -18,6 +18,10 @@ const event = (sequelize, DataTypes) => {
     }
   });
 
+  Event.associate = models => {
+    Event.belongsTo(models.User);
+  };
+
   return Event;
 };
 
