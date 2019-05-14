@@ -1,0 +1,15 @@
+type User {
+  id: ID!
+  email: String!
+  password: String
+  createdEvents: [Event!]
+}
+
+input UserInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createUser(user: UserInput!): User!
+}
