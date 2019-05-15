@@ -13,6 +13,8 @@ const user = (sequelize, DataTypes) => {
 
   User.associate = models => {
     User.hasMany(models.Event);
+
+    User.belongsToMany(models.Event, { through: models.Booking });
   };
 
   return User;

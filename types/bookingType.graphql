@@ -1,0 +1,22 @@
+enum BOOKING_STATUS {
+  CANCEL
+  ACTIVE
+}
+
+type Booking {
+  id: ID!
+  status: BOOKING_STATUS!
+  user: User!
+  event: Event!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Query {
+  bookings: [Booking!]
+}
+
+type Mutation {
+  bookEvent(eventId: ID!): Booking!
+  cancelBooking(bookingId: ID!): Event!
+}

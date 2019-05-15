@@ -17,7 +17,8 @@ const sequelize = new Sequelize(
 
 const models = {
   Event: sequelize.import(path.join(__dirname, "models", "Event.js")),
-  User: sequelize.import(path.join(__dirname, "models", "User.js"))
+  User: sequelize.import(path.join(__dirname, "models", "User.js")),
+  Booking: sequelize.import(path.join(__dirname, "models", "Booking.js"))
 };
 
 Object.keys(models).forEach(key => {
