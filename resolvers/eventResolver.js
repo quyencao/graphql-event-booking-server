@@ -1,6 +1,8 @@
+import authGuard from "../guards/authGuard";
+
 export default {
   Event: {
-    async creator(parent, args, { models }, info) {
+    creator: async (parent, args, { models }, info) => {
       const user = await models.User.findOne({
         where: {
           id: parent.userId
@@ -14,7 +16,7 @@ export default {
     }
   },
   Query: {
-    async events(parent, args, { models }, info) {
+    events: async (parent, args, { models }, info) => {
       const events = await models.Event.findAll();
       return events.map(event => {
         return {
@@ -25,17 +27,17 @@ export default {
     }
   },
   Mutation: {
-    async createEvent(parent, { event }, { models }, info) {
-      const user = await models.User.findByPk(1);
+    createEvent: authGuard(
+      async (parent, { event }, { models, currentUser }, info) => {
+        const newEvent = await currentUser.createEvent({
+          title: event.title,
+          description: event.description,
+          price: event.price,
+          date: event.date
+        });
 
-      const newEvent = await user.createEvent({
-        title: event.title,
-        description: event.description,
-        price: event.price,
-        date: event.date
-      });
-
-      return newEvent;
-    }
+        return newEvent;
+      }
+    )
   }
 };

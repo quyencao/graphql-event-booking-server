@@ -1,13 +1,21 @@
 type User {
   id: ID!
   email: String!
-  password: String
   createdEvents: [Event!]
 }
 
 input UserInput {
   email: String!
   password: String!
+}
+
+type AuthData {
+  email: String!
+  token: String!
+}
+
+type Query {
+  login(email: String!, password: String!): AuthData!
 }
 
 type Mutation {

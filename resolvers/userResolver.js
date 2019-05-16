@@ -1,8 +1,9 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export default {
   User: {
-    async createdEvents(parent, args, { models }, info) {
+    createdEvents: async (parent, args, { models }, info) => {
       const events = await models.Event.findAll({
         where: { userId: parent.id }
       });
@@ -15,9 +16,38 @@ export default {
       });
     }
   },
-  Query: {},
+  Query: {
+    login: async (parent, { email, password }, { models, jwtSecret }, info) => {
+      const user = await models.User.findOne({
+        where: {
+          email
+        }
+      });
+
+      if (!user) {
+        throw new Error("Email is not exist.");
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        throw new Error("Password is incorrect.");
+      }
+
+      const payload = {
+        userId: user.id
+      };
+
+      const token = jwt.sign(payload, jwtSecret, { expiresIn: "1h" });
+
+      return {
+        email: user.email,
+        token
+      };
+    }
+  },
   Mutation: {
-    async createUser(parent, { user }, { models }, info) {
+    createUser: async (parent, { user }, { models }, info) => {
       try {
         const existUser = await models.User.findOne({
           where: { email: user.email }
